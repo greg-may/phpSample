@@ -1,0 +1,45 @@
+  $totalappointmentlines='"DATE","TIME","STAFF_ID","CLIENT_ID","SERVICE_ID","ROOM_ID","MACHINE","NOTES","END_TIME"'."\n";
+  foreach($json_data as $member)
+  {
+	  $date=$member['transactionDate'];
+	  $time=$member['transactionDate'];
+	  $staff_first=$member['soldByEmployeeFirstName'];
+	  $staff_last=$member['soldByEmployeeLastName'];
+	  $client_id=$member['clientGlobalID'];
+	  $service_id=$member['transactionItemDescription'];
+	 
+	  
+	  /* Date Formatting for StartDate, StartTime, and EndTime  -- GM
+
+					[starttime] => 2021-01-08T15:45:00.0000000 
+	  */
+	  
+	  //concat staff name together
+	  $staff_id = $staff_first." ".$staff_last;
+	  
+
+	    
+	  
+	  $startdate=preg_replace("/\T\d{2}:\d{2}:\d{2}\.\d{7}/"," ",$date);
+	  $start_time=preg_replace("/\d{4}-\d{2}-\d{2}T/"," ",$time);
+	  $apptime=preg_replace("/\.\d{7}/","",$start_time);
+	  $startdate=chop($startdate);
+	  
+	
+	  
+	  
+	
+	  $totalappointmentlines.='"'.$startdate.'","'.$apptime.'","'.$staff_id.'","'.$customer.'","'.$service_id.'","","","",""'."\n";
+		
+
+  };
+  
+  #Write Appointments to file:
+  if (!($fpappointments= fopen($appointmentsfile, "w")))
+  {
+   print "ERROR WRITING:$appointmentsfile\n";
+  }
+  else
+  {
+   fwrite($fpappointments, $totalappointmentlines);
+  };
